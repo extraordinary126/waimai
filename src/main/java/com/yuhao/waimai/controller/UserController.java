@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.yuhao.waimai.bean.User;
 import com.yuhao.waimai.common.R;
+import com.yuhao.waimai.service.MailService;
 import com.yuhao.waimai.service.UserService;
 import com.yuhao.waimai.utils.SMSUtils;
 import com.yuhao.waimai.utils.ValidateCodeUtils;
@@ -26,7 +27,10 @@ public class UserController {
     @Resource
     private UserService userService;
 
-    @PostMapping("/sendMsg")    //传过来手机号
+    @Resource
+    private MailService mailService;
+
+    @PostMapping("/sendMsg")    //传过来手机号 邮箱号
     public R<String> sendMsg(@RequestBody User user, HttpSession session){
         String code = null;
         //获取手机号
@@ -36,13 +40,16 @@ public class UserController {
             code = ValidateCodeUtils.generateValidateCode(4).toString();
             //调用短信API发送短信
             //SMSUtils.sendMessage("signName","templateCode",phone,"param");
-            log.info("短信验证码是:{}",code);
+
+            mailService.sendSimpleMail("yuhao_work1@163.com",phone,
+                    "yuhao外卖系统的验证码", "[yuhao外卖系统]您的验证码是" + code);
+            log.info("验证码是:{}",code);
             //向session中存入验证码 登录时验证用
             //session.setAttribute(phone,code);
-            session.setAttribute(phone,"0000");
+            session.setAttribute(phone,code);
             return R.success("您的验证码是:" + code);
         }
-        return R.error("发送失败,手机号为空");
+        return R.error("发送失败,邮箱为空");
     }
     @PostMapping("/login")    //传过来手机号和验证码 key:phone,code
     public R<User> login(@RequestBody Map map, HttpSession session){

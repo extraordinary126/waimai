@@ -49,7 +49,8 @@ public class LoginCheckFilter implements Filter {
                 "/",
                 "/user/sendMsg",//发送短信
                 "/user/login",   //移动端登录
-                "/welcome/welcome.html"
+                "/welcome/welcome.html",
+                "/sendMail"
         };
         boolean matcherValue = loginPathMatcher(urls, requestURI);
         // 路径在数组里 不需要处理 直接放行

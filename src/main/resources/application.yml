@@ -1,6 +1,21 @@
 server:
   port: 8083
 spring:
+  mail:
+    default-encoding: UTF-8
+    host: smtp.163.com
+    password: CTWHBUHGWCQHIOWQ
+    port: 465
+    properties:
+      mail:
+        debug: false
+        mime:
+          splitlongparameters: false
+        smtp:
+          auth: false
+    protocol: smtps
+    test-connection: false
+    username: yuhao_work1@163.com
   application:
     name: waimai-project
   datasource:
